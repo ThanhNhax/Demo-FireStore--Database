@@ -7,13 +7,23 @@ import reportWebVitals from "./reportWebVitals";
 // Cấu hình store redux
 import { Provider } from "react-redux";
 import { store } from "./redux/configStore";
+
+// Cấu hình Router Dom
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import TodoApp from "./components/TodoApp";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route path="/todo" element={<TodoApp />}></Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );

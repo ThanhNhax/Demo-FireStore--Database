@@ -14,32 +14,19 @@ import Todos from "./components/Todos";
 import { db } from "./firebase";
 import { AppDispatch, RootState } from "./redux/configStore";
 import { deleteTodo, getArrTodos } from "./redux/todos/todoReduxer";
+import { Link, Outlet } from "react-router-dom";
 
 function App() {
-  const { arrTodos } = useSelector((state: RootState) => state.todos);
-  const dispatch: AppDispatch = useDispatch();
-  console.log({ arrTodos });
-  // Add Todos firebase
-
-  // Get todos tu firebase
-
-  useEffect(() => {
-    let action = getArrTodos();
-    dispatch(action);
-  }, []);
-
   return (
     <div className="App">
-      <AppTodo />
-      {/* render todos ra giao dien */}
-
-      {arrTodos.map((todo: Todo) => {
-        return (
-          <div key={todo.id}>
-            <Todos todo={todo} />
-          </div>
-        );
-      })}
+      <nav>
+        <ul>
+          <li>
+            <Link to="/todo">Todo App</Link>
+          </li>
+        </ul>
+      </nav>
+      <Outlet></Outlet>
     </div>
   );
 }
