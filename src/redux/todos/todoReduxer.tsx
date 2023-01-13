@@ -52,7 +52,7 @@ export const getArrTodos = () => {
     }
   };
 };
-// delete todos
+// delete todos firebase
 export const deleteTodos = (id: string) => {
   return async (dispatch: AppDispatch) => {
     try {
@@ -62,7 +62,7 @@ export const deleteTodos = (id: string) => {
     }
   };
 };
-//update todo
+//update todo firebase
 
 export const handleEdit = async (todo: Todo, title: string) => {
   await updateDoc(doc(db, "todos", todo.id), { text: title });
