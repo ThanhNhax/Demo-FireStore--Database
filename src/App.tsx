@@ -6,42 +6,28 @@ import {
   query,
   updateDoc,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import AppTodo, { Todo } from "./components/AppTodo";
 import Todos from "./components/Todos";
 import { db } from "./firebase";
+import { AppDispatch, RootState } from "./redux/configStore";
+import { deleteTodo, getArrTodos } from "./redux/todos/todoReduxer";
 
 function App() {
-  const [arrTodos, setArrTodos] = useState([]);
+  const { arrTodos } = useSelector((state: RootState) => state.todos);
+  const dispatch: AppDispatch = useDispatch();
+  console.log({ arrTodos });
   // Add Todos firebase
 
   // Get todos tu firebase
 
   useEffect(() => {
-    const result = query(collection(db, "todos"));
-    const unSub = onSnapshot(result, (querySnapshot) => {
-      let arrTodos: any = [];
-      querySnapshot.forEach((doc) => {
-        arrTodos.push({ ...doc.data(), id: doc.id });
-      });
-      setArrTodos(arrTodos);
-    });
-    return () => unSub();
+    let action = getArrTodos();
+    dispatch(action);
   }, []);
 
-  // Delete firebase
-  const handleDelete = async (id: string) => {
-    await deleteDoc(doc(db, "todos", id));
-  };
-  // update firebase
-  const handleEdit = async (todo: Todo, title: string) => {
-    await updateDoc(doc(db, "todos", todo.id), { text: title });
-  };
-  const toggleComplete = async (todo: Todo) => {
-    console.log({ todo });
-    await updateDoc(doc(db, "todos", todo.id), { checked: !todo.checked });
-  };
   return (
     <div className="App">
       <AppTodo />
@@ -49,14 +35,9 @@ function App() {
 
       {arrTodos.map((todo: Todo) => {
         return (
-          <li key={todo.id}>
-            <Todos
-              todo={todo}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              toggleComplete={toggleComplete}
-            />
-          </li>
+          <div key={todo.id}>
+            <Todos todo={todo} />
+          </div>
         );
       })}
     </div>

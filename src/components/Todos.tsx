@@ -1,30 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/configStore";
+import {
+  deleteTodos,
+  handleEdit,
+  toggleComplete,
+} from "../redux/todos/todoReduxer";
 import { Todo } from "./AppTodo";
 
 type Props = {
   todo: Todo;
   checked?: boolean;
-  handleDelete: (id: string) => void;
-  handleEdit: (todo: Todo, title: string) => void;
-  toggleComplete: (todo: Todo) => void;
 };
 
-export default function Todos({
-  todo,
-  handleDelete,
-  handleEdit,
-  toggleComplete,
-}: Props) {
+export default function Todos({ todo }: Props) {
   const [newTodo, setNewTodo] = useState<string>(todo.text);
-  const handleChange = (e: any) => {
-    e.preventDefault();
-    if (todo.checked === true) {
-      setNewTodo(todo.text);
-    } else {
-      todo.text = "";
-      setNewTodo(e.target.value);
-    }
-  };
+  const dispatch: AppDispatch = useDispatch();
 
   return (
     <>
@@ -36,11 +27,18 @@ export default function Todos({
       <input
         type="text"
         placeholder="Enter todo ..."
-        onChange={handleChange}
-        value={todo.text === "" ? newTodo : todo.text}
+        onChange={(e) => setNewTodo(e.target.value)}
+        value={newTodo}
       />
 
-      <button onClick={() => handleDelete(todo.id)}>&times;</button>
+      <button
+        onClick={() => {
+          let action = deleteTodos(todo.id);
+          dispatch(action);
+        }}
+      >
+        &times;
+      </button>
       <button onClick={() => handleEdit(todo, newTodo)}>Edit</button>
     </>
   );

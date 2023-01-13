@@ -9,7 +9,7 @@ export interface Todo {
   checked: boolean;
   id: string;
 }
-export default function AppTodo({}: Props) {
+export default function AppTodo() {
   const [todo, setTodos] = useState("");
   const hangleSubmit = async (e: any) => {
     e.preventDefault();
